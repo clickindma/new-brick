@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The New Brick - Projects</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .bg-brick {
+            background-color: #B22222;
+        }
+
+        .text-brick {
+            color: #B22222;
+        }
+
+        .border-brick {
+            border-color: #B22222;
+        }
+
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.4s ease;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(178, 34, 34, 0.4);
+        }
+
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(178, 34, 34, 0.9), rgba(0, 0, 0, 0.8));
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #B22222;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .project-detail-hero {
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .project-gallery img {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .spec-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-left: 4px solid #B22222;
+        }
+
+        .progress-bar {
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+
+        .progress-bar.animate {
+            width: var(--progress);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white shadow-lg z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="text-2xl font-bold text-brick cursor-pointer" onclick="showSection('projects')">
+                    <i class="fas fa-building mr-2"></i>The New Brick
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-brick font-medium">Home</a>
+                    <a href="about.html" class="nav-link text-gray-700 hover:text-brick font-medium">About</a>
+                    <a href="service.html" class="nav-link text-gray-700 hover:text-brick font-medium">Services</a>
+                    <a href="projects.html" class="nav-link text-gray-700 hover:text-brick font-medium active">Projects</a>
+                    <a href="testimonial.html" class="nav-link text-gray-700 hover:text-brick font-medium">Testimonials</a>
+                    <a href="contact.html" class="nav-link text-gray-700 hover:text-brick font-medium">Contact</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button class="text-gray-700 hover:text-brick" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-40 md:hidden">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-xl font-bold text-brick">Menu</span>
+                    <button onclick="toggleMobileMenu()" class="text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <a href="index.html" class="block text-gray-700 hover:text-brick font-medium py-2" onclick="toggleMobileMenu()">Home</a>
+                    <a href="about.html" class="block text-gray-700 hover:text-brick font-medium py-2" onclick="toggleMobileMenu()">About</a>
+                    <a href="service.html" class="block text-gray-700 hover:text-brick font-medium py-2" onclick="toggleMobileMenu()">Services</a>
+                    <a href="projects.html" class="block text-gray-700 hover:text-brick font-medium py-2 active" onclick="showSection('projects'); toggleMobileMenu()">Projects</a>
+                    <a href="testimonial.html" class="block text-gray-700 hover:text-brick font-medium py-2" onclick="toggleMobileMenu()">Testimonials</a>
+                    <a href="contact.html" class="block text-gray-700 hover:text-brick font-medium py-2" onclick="toggleMobileMenu()">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Projects Section -->
+    <section id="projects" class="page-section py-20 active">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Projects</h2>
+                <p class="text-xl text-gray-600">Showcasing our commitment to excellence and innovation</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="project-card card-3d bg-white rounded-lg shadow-lg overflow-hidden relative" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-64 bg-gradient-to-br from-gray-300 to-gray-500">
+                        <img src="./images/1.png">
+                    </div>
+                    <div class="project-overlay">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-bold mb-2">Luxury Villa Complex</h3>
+                            <p class="mb-4">Modern residential development</p>
+                            <button class="bg-white text-brick px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors" onclick="showProjectDetail('luxury-villa')">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <br><br>
+                        <h3 class="text-xl font-bold mb-2">Luxury Villa Complex</h3>
+                        <p class="text-gray-600 mb-4">A premium residential development featuring modern amenities and sustainable design.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Completed 2023</span>
+                            <span class="text-brick font-semibold">Residential</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card card-3d bg-white rounded-lg shadow-lg overflow-hidden relative" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-64 bg-gradient-to-br from-blue-300 to-blue-500">
+                        <img src="./images/2.png">
+                    </div>
+                    <div class="project-overlay">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-bold mb-2">Corporate Headquarters</h3>
+                            <p class="mb-4">Modern office complex</p>
+                            <button class="bg-white text-brick px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors" onclick="showProjectDetail('corporate-hq')">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <br><br>
+                        <h3 class="text-xl font-bold mb-2">Corporate Headquarters</h3>
+                        <p class="text-gray-600 mb-4">State-of-the-art office building with smart technology integration.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Completed 2023</span>
+                            <span class="text-brick font-semibold">Commercial</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card card-3d bg-white rounded-lg shadow-lg overflow-hidden relative" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-64 bg-gradient-to-br from-green-300 to-green-500">
+                        <img src="./images/3.png">
+                    </div>
+                    <div class="project-overlay">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-bold mb-2">Industrial Warehouse</h3>
+                            <p class="mb-4">Logistics and distribution center</p>
+                            <button class="bg-white text-brick px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors" onclick="showProjectDetail('industrial-warehouse')">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <br>
+                        <br>
+                        <h3 class="text-xl font-bold mb-2">Industrial Warehouse</h3>
+                        <p class="text-gray-600 mb-4">Large-scale distribution facility with automated systems.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Completed 2022</span>
+                            <span class="text-brick font-semibold">Industrial</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card card-3d bg-white rounded-lg shadow-lg overflow-hidden relative" data-aos="fade-up" data-aos-delay="400">
+                    <div class="h-64 bg-gradient-to-br from-purple-300 to-purple-500">
+
+                        <img src="./images/mall.png">
+                    </div>
+                    <div class="project-overlay">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-bold mb-2">Shopping Mall</h3>
+                            <p class="mb-4">Retail and entertainment complex</p>
+                            <button class="bg-white text-brick px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors" onclick="showProjectDetail('shopping-mall')">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <br>
+                        <br>
+                        <h3 class="text-xl font-bold mb-2">Shopping Mall</h3>
+                        <p class="text-gray-600 mb-4">Multi-level retail complex with entertainment facilities.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Completed 2022</span>
+                            <span class="text-brick font-semibold">Commercial</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card card-3d bg-white rounded-lg shadow-lg overflow-hidden relative" data-aos="fade-up" data-aos-delay="500">
+                    <div class="h-64 bg-gradient-to-br from-orange-300 to-orange-500">
+                        <img src="./images/tower.png">
+                    </div>
+                    <div class="project-overlay">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-bold mb-2">Residential Towers</h3>
+                            <p class="mb-4">High-rise apartment complex</p>
+                            <button class="bg-white text-brick px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors" onclick="showProjectDetail('residential-towers')">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <br><br>
+                        <h3 class="text-xl font-bold mb-2">Residential Towers</h3>
+                        <p class="text-gray-600 mb-4">Twin tower residential complex with luxury amenities.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Completed 2021</span>
+                            <span class="text-brick font-semibold">Residential</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card card-3d bg-white rounded-lg shadow-lg overflow-hidden relative" data-aos="fade-up" data-aos-delay="600">
+                    <div class="h-64 bg-gradient-to-br from-red-300 to-red-500">
+                        <img src="./images/hospital tower.png">
+                    </div>
+                    <div class="project-overlay">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-bold mb-2">Hospital Complex</h3>
+                            <p class="mb-4">Modern healthcare facility</p>
+                            <button class="bg-white text-brick px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors" onclick="showProjectDetail('hospital-complex')">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <br><br>
+                        <h3 class="text-xl font-bold mb-2">Hospital Complex</h3>
+                        <p class="text-gray-600 mb-4">Multi-specialty hospital with advanced medical facilities.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Completed 2021</span>
+                            <span class="text-brick font-semibold">Healthcare</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Detail Pages -->
+    <section id="project-detail" class="page-section">
+        <div id="project-detail-content">
+            <!-- Project details will be loaded here dynamically -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-brick">The New Brick</h3>
+                    <p class="text-gray-400 mb-4">Building dreams, creating legacies. Your trusted construction partner for over a decade.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-brick transition-colors">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-brick transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-brick transition-colors">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-brick transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="services.html" class="hover:text-white transition-colors">Residential Construction</a></li>
+                        <li><a href="services.html" class="hover:text-white transition-colors">Commercial Construction</a></li>
+                        <li><a href="services.html" class="hover:text-white transition-colors">Industrial Construction</a></li>
+                        <li><a href="services.html" class="hover:text-white transition-colors">Renovation & Remodeling</a></li>
+                        <li><a href="services.html" class="hover:text-white transition-colors">Design & Planning</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="about.html" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="projects.html" class="hover:text-white transition-colors">Our Projects</a></li>
+                        <li><a href="testimonial.html" class="hover:text-white transition-colors">Testimonials</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Sector 18, NOIDA</p>
+                        <p><i class="fas fa-phone mr-2"></i>+91-7303751515</p>
+                        <p><i class="fas fa-envelope mr-2"></i>rangar.nimit@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2024 The New Brick. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <div class="relative">
+            <img id="lightbox-img" src="" alt="">
+            <button class="absolute top-4 right-4 text-white text-2xl" onclick="closeLightbox()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update navigation active state
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Find and activate corresponding nav link
+            const activeLink = document.querySelector(`[onclick="showSection('${sectionId}')"]`) || document.querySelector(`[href="#${sectionId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Reinitialize AOS for the new section
+            setTimeout(() => {
+                AOS.refresh();
+            }, 100);
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Project detail functionality
+        const projectData = {
+            'luxury-villa': {
+                title: 'Luxury Villa Complex',
+                category: 'Residential',
+                location: 'Gurgaon, Haryana',
+                year: '2023',
+                area: '25,000 sq ft',
+                cost: '₹15 Crores',
+                description: 'A premium residential development featuring modern amenities and sustainable design. This luxury villa complex sets new standards for contemporary living with its innovative architecture and eco-friendly features.',
+                features: [
+                    'Smart home automation system',
+                    'Solar panel installation',
+                    'Private swimming pools',
+                    'Landscaped gardens',
+                    'Underground parking',
+                    '24/7 security system'
+                ],
+                timeline: [
+                    { phase: 'Planning & Design', duration: '3 months', status: 'completed' },
+                    { phase: 'Foundation & Structure', duration: '6 months', status: 'completed' },
+                    { phase: 'Interior & Finishing', duration: '4 months', status: 'completed' },
+                    { phase: 'Landscaping & Final Touch', duration: '2 months', status: 'completed' }
+                ],
+                specifications: [
+                    { label: 'Built-up Area', value: '25,000 sq ft' },
+                    { label: 'Number of Villas', value: '12 Units' },
+                    { label: 'Floors', value: '3 + Basement' },
+                    { label: 'Parking', value: '2 Cars per villa' },
+                    { label: 'Green Area', value: '40% of total area' }
+                ],
+                images: [
+                    { type: 'hero', color: 'from-gray-300 to-gray-500' },
+                    { type: 'gallery', color: 'from-blue-300 to-blue-500' },
+                    { type: 'gallery', color: 'from-green-300 to-green-500' },
+                    { type: 'gallery', color: 'from-purple-300 to-purple-500' }
+                ]
+            },
+            'corporate-hq': {
+                title: 'Corporate Headquarters',
+                category: 'Commercial',
+                location: 'Cyber City, Gurgaon',
+                year: '2023',
+                area: '50,000 sq ft',
+                cost: '₹35 Crores',
+                description: 'State-of-the-art office building with smart technology integration. This modern corporate headquarters represents the future of workplace design with its innovative features and sustainable architecture.',
+                features: [
+                    'LEED Gold certified building',
+                    'Smart HVAC systems',
+                    'High-speed elevators',
+                    'Conference and meeting rooms',
+                    'Cafeteria and recreation areas',
+                    'Ample parking space'
+                ],
+                timeline: [
+                    { phase: 'Design & Approval', duration: '4 months', status: 'completed' },
+                    { phase: 'Structural Work', duration: '8 months', status: 'completed' },
+                    { phase: 'MEP & Interiors', duration: '6 months', status: 'completed' },
+                    { phase: 'Testing & Handover', duration: '2 months', status: 'completed' }
+                ],
+                specifications: [
+                    { label: 'Total Area', value: '50,000 sq ft' },
+                    { label: 'Floors', value: '15 + 3 Basement' },
+                    { label: 'Capacity', value: '1200 employees' },
+                    { label: 'Parking', value: '300 vehicles' },
+                    { label: 'Energy Rating', value: 'LEED Gold' }
+                ],
+                images: [
+                    { type: 'hero', color: 'from-blue-300 to-blue-500' },
+                    { type: 'gallery', color: 'from-gray-300 to-gray-500' },
+                    { type: 'gallery', color: 'from-orange-300 to-orange-500' },
+                    { type: 'gallery', color: 'from-red-300 to-red-500' }
+                ]
+            },
+            'industrial-warehouse': {
+                title: 'Industrial Warehouse',
+                category: 'Industrial',
+                location: 'Greater Noida, UP',
+                year: '2022',
+                area: '1,00,000 sq ft',
+                cost: '₹25 Crores',
+                description: 'Large-scale distribution facility with automated systems. This modern warehouse facility incorporates the latest in logistics technology and efficient design for optimal operations.',
+                features: [
+                    'Automated storage systems',
+                    'Climate control technology',
+                    'Loading dock management',
+                    'Fire safety systems',
+                    'Security and surveillance',
+                    'Office and administrative areas'
+                ],
+                timeline: [
+                    { phase: 'Site Preparation', duration: '2 months', status: 'completed' },
+                    { phase: 'Structural Construction', duration: '10 months', status: 'completed' },
+                    { phase: 'MEP & Automation', duration: '4 months', status: 'completed' },
+                    { phase: 'Testing & Commissioning', duration: '2 months', status: 'completed' }
+                ],
+                specifications: [
+                    { label: 'Warehouse Area', value: '1,00,000 sq ft' },
+                    { label: 'Height', value: '40 feet clear' },
+                    { label: 'Loading Docks', value: '24 bays' },
+                    { label: 'Storage Capacity', value: '15,000 pallets' },
+                    { label: 'Office Area', value: '5,000 sq ft' }
+                ],
+                images: [
+                    { type: 'hero', color: 'from-green-300 to-green-500' },
+                    { type: 'gallery', color: 'from-blue-300 to-blue-500' },
+                    { type: 'gallery', color: 'from-gray-300 to-gray-500' },
+                    { type: 'gallery', color: 'from-yellow-300 to-yellow-500' }
+                ]
+            },
+            'shopping-mall': {
+                title: 'Shopping Mall',
+                category: 'Commercial',
+                location: 'Sector 62, Noida',
+                year: '2022',
+                area: '75,000 sq ft',
+                cost: '₹45 Crores',
+                description: 'Multi-level retail complex with entertainment facilities. This modern shopping destination combines retail, dining, and entertainment in a sophisticated architectural design.',
+                features: [
+                    'Multi-level retail spaces',
+                    'Food court and restaurants',
+                    'Entertainment zone',
+                    'Central air conditioning',
+                    'Escalators and elevators',
+                    'Multi-level parking'
+                ],
+                timeline: [
+                    { phase: 'Design & Planning', duration: '4 months', status: 'completed' },
+                    { phase: 'Construction', duration: '12 months', status: 'completed' },
+                    { phase: 'Interior Fit-out', duration: '6 months', status: 'completed' },
+                    { phase: 'Testing & Opening', duration: '2 months', status: 'completed' }
+                ],
+                specifications: [
+                    { label: 'Retail Area', value: '75,000 sq ft' },
+                    { label: 'Levels', value: '4 + 2 Basement' },
+                    { label: 'Stores', value: '150+ retail outlets' },
+                    { label: 'Parking', value: '500 vehicles' },
+                    { label: 'Food Court', value: '20 restaurants' }
+                ],
+                images: [
+                    { type: 'hero', color: 'from-purple-300 to-purple-500' },
+                    { type: 'gallery', color: 'from-pink-300 to-pink-500' },
+                    { type: 'gallery', color: 'from-indigo-300 to-indigo-500' },
+                    { type: 'gallery', color: 'from-teal-300 to-teal-500' }
+                ]
+            },
+            'residential-towers': {
+                title: 'Residential Towers',
+                category: 'Residential',
+                location: 'Sector 150, Noida',
+                year: '2021',
+                area: '2,00,000 sq ft',
+                cost: '₹80 Crores',
+                description: 'Twin tower residential complex with luxury amenities. These high-rise residential towers offer modern living with comprehensive amenities and stunning city views.',
+                features: [
+                    'Twin tower design',
+                    'Swimming pool and gym',
+                    'Children\'s play area',
+                    'Landscaped gardens',
+                    'Club house facilities',
+                    '24/7 security and maintenance'
+                ],
+                timeline: [
+                    { phase: 'Foundation & Approval', duration: '6 months', status: 'completed' },
+                    { phase: 'Tower Construction', duration: '18 months', status: 'completed' },
+                    { phase: 'Interior & Amenities', duration: '8 months', status: 'completed' },
+                    { phase: 'Landscaping & Handover', duration: '3 months', status: 'completed' }
+                ],
+                specifications: [
+                    { label: 'Total Units', value: '240 apartments' },
+                    { label: 'Tower Height', value: '25 floors each' },
+                    { label: 'Unit Types', value: '2BHK, 3BHK, 4BHK' },
+                    { label: 'Amenities Area', value: '15,000 sq ft' },
+                    { label: 'Green Area', value: '35% of total area' }
+                ],
+                images: [
+                    { type: 'hero', color: 'from-orange-300 to-orange-500' },
+                    { type: 'gallery', color: 'from-cyan-300 to-cyan-500' },
+                    { type: 'gallery', color: 'from-lime-300 to-lime-500' },
+                    { type: 'gallery', color: 'from-rose-300 to-rose-500' }
+                ]
+            },
+            'hospital-complex': {
+                title: 'Hospital Complex',
+                category: 'Healthcare',
+                location: 'Sector 76, Noida',
+                year: '2021',
+                area: '80,000 sq ft',
+                cost: '₹60 Crores',
+                description: 'Multi-specialty hospital with advanced medical facilities. This state-of-the-art healthcare facility provides comprehensive medical services with modern infrastructure and technology.',
+                features: [
+                    'Multi-specialty departments',
+                    'Advanced medical equipment',
+                    'Emergency and trauma center',
+                    'Diagnostic imaging center',
+                    'Pharmacy and laboratories',
+                    'Patient and visitor amenities'
+                ],
+                timeline: [
+                    { phase: 'Planning & Design', duration: '5 months', status: 'completed' },
+                    { phase: 'Structural Work', duration: '12 months', status: 'completed' },
+                    { phase: 'MEP & Medical Systems', duration: '8 months', status: 'completed' },
+                    { phase: 'Equipment & Commissioning', duration: '4 months', status: 'completed' }
+                ],
+                specifications: [
+                    { label: 'Built-up Area', value: '80,000 sq ft' },
+                    { label: 'Bed Capacity', value: '200 beds' },
+                    { label: 'OT Complexes', value: '8 operation theaters' },
+                    { label: 'Departments', value: '15 specialties' },
+                    { label: 'Parking', value: '200 vehicles' }
+                ],
+                images: [
+                    { type: 'hero', color: 'from-red-300 to-red-500' },
+                    { type: 'gallery', color: 'from-emerald-300 to-emerald-500' },
+                    { type: 'gallery', color: 'from-violet-300 to-violet-500' },
+                    { type: 'gallery', color: 'from-amber-300 to-amber-500' }
+                ]
+            }
+        };
+
+        function showProjectDetail(projectId) {
+            const project = projectData[projectId];
+            if (!project) return;
+
+            const detailContent = document.getElementById('project-detail-content');
+            
+            detailContent.innerHTML = `
+                <!-- Back Button -->
+                <div class="container mx-auto px-4 py-8">
+                    <button onclick="showSection('projects')" class="flex items-center text-brick hover:text-red-700 font-semibold mb-6 transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Projects
+                    </button>
+                </div>
+
+                <!-- Project Hero -->
+                <div class="project-detail-hero bg-gradient-to-br ${project.images[0].color} relative">
+                    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                    <div class="relative container mx-auto px-4 h-full flex items-center">
+                        <div class="text-white">
+                            <span class="inline-block bg-brick px-4 py-2 rounded-full text-sm font-semibold mb-4">${project.category}</span>
+                            <h1 class="text-5xl font-bold mb-4">${project.title}</h1>
+                            <div class="flex flex-wrap gap-6 text-lg">
+                                <div><i class="fas fa-map-marker-alt mr-2"></i>${project.location}</div>
+                                <div><i class="fas fa-calendar mr-2"></i>${project.year}</div>
+                                <div><i class="fas fa-ruler-combined mr-2"></i>${project.area}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Details -->
+                <div class="container mx-auto px-4 py-16">
+                    <!-- Project Overview -->
+                    <div class="grid lg:grid-cols-3 gap-12 mb-16">
+                        <div class="lg:col-span-2">
+                            <h2 class="text-3xl font-bold mb-6">Project Overview</h2>
+                            <p class="text-gray-600 text-lg leading-relaxed mb-8">${project.description}</p>
+                            
+                            <h3 class="text-2xl font-bold mb-4">Key Features</h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                ${project.features.map(feature => `
+                                    <div class="flex items-center">
+                                        <i class="fas fa-check-circle text-brick mr-3"></i>
+                                        <span>${feature}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="bg-gray-50 rounded-lg p-6 sticky top-24">
+                                <h3 class="text-xl font-bold mb-4">Project Information</h3>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between">
+                                        <span class="font-semibold">Category:</span>
+                                        <span>${project.category}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-semibold">Location:</span>
+                                        <span>${project.location}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-semibold">Year:</span>
+                                        <span>${project.year}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-semibold">Area:</span>
+                                        <span>${project.area}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-semibold">Investment:</span>
+                                        <span>${project.cost}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-6 border-t">
+                                    <button onclick="window.location.href='contact.html'" class="w-full bg-brick text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                                        Start Your Project
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Gallery -->
+                    <div class="mb-16">
+                        <h2 class="text-3xl font-bold mb-8">Project Gallery</h2>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 project-gallery">
+                            ${project.images.slice(1).map((image, index) => `
+                                <div class="h-64 bg-gradient-to-br ${image.color} rounded-lg cursor-pointer" onclick="openLightbox('${image.color}')">
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Project Specifications -->
+                    <div class="grid lg:grid-cols-2 gap-12 mb-16">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-8">Specifications</h2>
+                            <div class="space-y-4">
+                                ${project.specifications.map(spec => `
+                                    <div class="spec-item p-4 rounded-lg">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-semibold">${spec.label}</span>
+                                            <span class="text-brick font-bold">${spec.value}</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 class="text-3xl font-bold mb-8">Project Timeline</h2>
+                            <div class="space-y-6">
+                                ${project.timeline.map((phase, index) => `
+                                    <div class="timeline-item">
+                                        <h4 class="font-semibold text-lg">${phase.phase}</h4>
+                                        <p class="text-gray-600 mb-2">Duration: ${phase.duration}</p>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div class="progress-bar bg-brick h-2 rounded-full" style="--progress: 100%"></div>
+                                        </div>
+                                        <span class="text-sm text-green-600 font-semibold">Completed</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Related Projects -->
+                    <div>
+                        <h2 class="text-3xl font-bold mb-8">Other Projects</h2>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            ${Object.entries(projectData).filter(([id, _]) => id !== projectId).slice(0, 3).map(([id, proj]) => `
+                                <div class="project-card card-3d bg-white rounded-lg shadow-lg overflow-hidden relative cursor-pointer" onclick="showProjectDetail('${id}')">
+                                    <div class="h-48 bg-gradient-to-br ${proj.images[0].color}"></div>
+                                    <div class="p-4">
+                                        <h3 class="text-lg font-bold mb-2">${proj.title}</h3>
+                                        <p class="text-gray-600 text-sm">${proj.category} • ${proj.year}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            showSection('project-detail');
+            
+            // Animate progress bars
+            setTimeout(() => {
+                const progressBars = document.querySelectorAll('.progress-bar');
+                progressBars.forEach(bar => {
+                    bar.classList.add('animate');
+                });
+            }, 500);
+        }
+
+        // Lightbox functionality
+        function openLightbox(imageColor) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            
+            // Create a colored rectangle as placeholder
+            const canvas = document.createElement('canvas');
+            canvas.width = 800;
+            canvas.height = 600;
+            const ctx = canvas.getContext('2d');
+            
+            // Extract colors from gradient class
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            if (imageColor.includes('gray')) {
+                gradient.addColorStop(0, '#D1D5DB');
+                gradient.addColorStop(1, '#6B7280');
+            } else if (imageColor.includes('blue')) {
+                gradient.addColorStop(0, '#93C5FD');
+                gradient.addColorStop(1, '#3B82F6');
+            } else if (imageColor.includes('green')) {
+                gradient.addColorStop(0, '#86EFAC');
+                gradient.addColorStop(1, '#10B981');
+            } else {
+                gradient.addColorStop(0, '#FCA5A5');
+                gradient.addColorStop(1, '#EF4444');
+            }
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            lightboxImg.src = canvas.toDataURL();
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 100) {
+                    navbar.classList.add('bg-opacity-95');
+                } else {
+                    navbar.classList.remove('bg-opacity-95');
+                }
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const mobileMenu = document.querySelector('.mobile-menu');
+                const menuButton = event.target.closest('[onclick="toggleMobileMenu()"]');
+                
+                if (!mobileMenu.contains(event.target) && !menuButton && mobileMenu.classList.contains('active')) {
+                    toggleMobileMenu();
+                }
+            });
+
+            // Close lightbox when clicking outside image
+            document.getElementById('lightbox').addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeLightbox();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
